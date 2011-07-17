@@ -1,5 +1,4 @@
 ClusterChef.cluster 'demosimple' do
-  use :defaults
   mounts_ephemeral_volumes
   setup_role_implications
 
@@ -11,39 +10,21 @@ ClusterChef.cluster 'demosimple' do
     bootstrap_distro    'ubuntu10.04-cluster_chef'
   end
 
-  cluster_role do
-    run_list(*%w[
-      role[chef_client]
-    ])
-  end
+  role                  :base_role
+  role                  :chef_client
+  role                  :ssh
 
-  role :ssh
+  cluster_role do
+  end
 
   facet :homebase do
     instances           1
-    role :nfs_server
+    role                :nfs_server
+
     facet_role do
       run_list(*%w[
-       role[nfs_server]
-       role[jenkins]
+        role[big_package]
       ])
-      # role[resque]
-      # role[big_package]
     end
   end
-
-  facet :jobqueue do
-    instances           1
-    role :nfs_client
-    facet_role do
-      run_list(*%w[
-       role[nfs_client]
-       role[jenkins]
-      ])
-      #
-      # role[resque]
-      # role[big_package]
-    end
-  end
-
 end
