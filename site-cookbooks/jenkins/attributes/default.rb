@@ -18,9 +18,9 @@
 # limitations under the License.
 #
 
-default[:jenkins][:mirror] = "http://jenkins-ci.org"
-default[:jenkins][:plugins_mirror] = "http://http://updates.jenkins-ci.org"
-default[:jenkins][:plugins_mirror] = "http://http://updates.jenkins-ci.org"
+
+default[:jenkins][:apt_mirror]     = "http://pkg.jenkins-ci.org/debian"
+default[:jenkins][:plugins_mirror] = "http://updates.jenkins-ci.org"
 default[:jenkins][:java_home] = ENV['JAVA_HOME']
 
 default[:jenkins][:server][:home] = "/var/lib/jenkins"

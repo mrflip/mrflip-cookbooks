@@ -31,7 +31,7 @@ ClusterChef.cluster 'demojenkins' do
   end
 
   facet :master do
-    instances           1
+    instances           2
     cloud.security_group "jenkins_server" do
       authorize_port_range jenkins_server_port  # web console
     end
