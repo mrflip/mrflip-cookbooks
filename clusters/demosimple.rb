@@ -15,6 +15,10 @@ ClusterChef.cluster 'demosimple' do
   role                  :ssh
 
   cluster_role do
+    run_list(*%w[])
+    override_attributes({
+        :ruby => { :version => '1.9.1' }, # yes 1.9.1 means 1.9.2
+      })
   end
 
   facet :homebase do

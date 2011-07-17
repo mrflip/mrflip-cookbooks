@@ -1,9 +1,21 @@
 pkey = "#{node[:jenkins][:server][:home]}/.ssh/id_rsa"
 
+user node[:jenkins][:server][:user] do
+  home      node[:jenkins][:server][:home]
+end
+
+directory node[:jenkins][:server][:home] do
+  recursive true
+  owner     node[:jenkins][:server][:user]
+  group     node[:jenkins][:server][:group]
+end
+
 directory "#{node[:jenkins][:server][:home]}/.ssh" do
-  mode 0700
-  owner node[:jenkins][:server][:user]
-  group node[:jenkins][:server][:group]
+  mode      "0700"
+  owner     node[:jenkins][:server][:user]
+  group     node[:jenkins][:server][:group]
+  recursive true
+  action    :create
 end
 
 execute "ssh-keygen -f #{pkey} -N ''" do

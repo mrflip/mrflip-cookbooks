@@ -13,6 +13,7 @@ ClusterChef.cluster 'demojenkins' do
   role                  :base_role
   role                  :chef_client
   role                  :ssh
+  role                  :nfs_client
 
   jenkins_server_port = 8700
   cluster_role do
@@ -24,13 +25,13 @@ ClusterChef.cluster 'demojenkins' do
           :server => {
             :port => jenkins_server_port,
           }
-        }
+        },
+        :ruby => { :version => '1.9.1' }, # yes 1.9.1 means 1.9.2
       })
   end
 
   facet :master do
     instances           1
-    role                :nfs_client
     cloud.security_group "jenkins_server" do
       authorize_port_range jenkins_server_port  # web console
     end
@@ -48,7 +49,6 @@ ClusterChef.cluster 'demojenkins' do
 
   facet :worker do
     instances           1
-    role                :nfs_client
     cloud.security_group "jenkins_worker"
 
     facet_role do
