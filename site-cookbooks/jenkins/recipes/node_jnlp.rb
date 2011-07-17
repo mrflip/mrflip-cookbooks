@@ -20,7 +20,7 @@
 
 include_recipe "runit"
 
-service_name = "jenkins-slave"
+service_name = "jenkins_node"
 slave_jar = "#{node[:jenkins][:node][:home]}/slave.jar"
 
 group node[:jenkins][:node][:user] do
