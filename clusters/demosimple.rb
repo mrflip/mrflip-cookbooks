@@ -8,12 +8,25 @@ ClusterChef.cluster 'demosimple' do
     image_name          "maverick"
     flavor              "t1.micro"
     availability_zones  ['us-east-1a']
+    bootstrap_distro    'ubuntu10.04-bob'
+  end
+
+  cluster_role do
+    run_list(*%w[
+       role[chef_client]
+    ])
   end
 
   facet :homebase do
     instances           1
-    role                "nfs_server"
-    role                "big_package"
+
+    facet_role do
+      run_list(*%w[
+       role[nfs_server]
+       role[big_package]
+      ])
+    end
+
   end
 
   chef_attributes({
