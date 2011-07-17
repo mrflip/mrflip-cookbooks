@@ -1,6 +1,6 @@
 #
 # Author:: Doug MacEachern <dougm@vmware.com>
-# Cookbook Name:: hudson
+# Cookbook Name:: jenkins
 # Provider:: job
 #
 # Copyright:: 2010, VMware, Inc.
@@ -29,21 +29,21 @@ end
 def job_exists
   url = URI.parse(job_url)
   res = Chef::REST::RESTRequest.new(:GET, url, nil).call
-  Chef::Log.debug("[hudson_job] GET #{url.request_uri} == #{res.code}")
+  Chef::Log.debug("[jenkins_job] GET #{url.request_uri} == #{res.code}")
   res.kind_of?(Net::HTTPSuccess)
 end
 
 def post_job(url)
   #shame we can't use http_request resource
   url = URI.parse(url)
-  Chef::Log.debug("[hudson_job] POST #{url.request_uri} using #{@new_resource.config}")
+  Chef::Log.debug("[jenkins_job] POST #{url.request_uri} using #{@new_resource.config}")
   body = IO.read(@new_resource.config)
   headers = {"Content-Type" => "text/xml"}
   res = Chef::REST::RESTRequest.new(:POST, url, body, headers).call
   res.error! unless res.kind_of?(Net::HTTPSuccess)
 end
 
-#could also use: hudson_cli "create-job #{@new_resource.job_name} < #{@new_resource.config}"
+#could also use: jenkins_cli "create-job #{@new_resource.job_name} < #{@new_resource.config}"
 def action_create
   unless job_exists
     post_job(new_job_url)
@@ -60,17 +60,17 @@ def action_update
 end
 
 def action_delete
-  hudson_cli "delete-job #{@new_resource.job_name}"
+  jenkins_cli "delete-job #{@new_resource.job_name}"
 end
 
 def action_disable
-  hudson_cli "disable-job #{@new_resource.job_name}"
+  jenkins_cli "disable-job #{@new_resource.job_name}"
 end
 
 def action_enable
-  hudson_cli "enable-job #{@new_resource.job_name}"
+  jenkins_cli "enable-job #{@new_resource.job_name}"
 end
 
 def action_build
-  hudson_cli "build #{@new_resource.job_name}"
+  jenkins_cli "build #{@new_resource.job_name}"
 end

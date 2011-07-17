@@ -1,6 +1,6 @@
 #
 # Author:: Doug MacEachern <dougm@vmware.com>
-# Cookbook Name:: hudson
+# Cookbook Name:: jenkins
 # Resource:: node
 #
 # Copyright:: 2010, VMware, Inc.

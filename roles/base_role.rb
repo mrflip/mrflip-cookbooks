@@ -5,7 +5,6 @@ run_list *%w[
   cluster_chef::node_name
 
   build-essential
-  ubuntu
   motd
 
   ]

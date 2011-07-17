@@ -1,6 +1,6 @@
 //
 // Author:: Doug MacEachern <dougm@vmware.com>
-// Cookbook Name:: hudson
+// Cookbook Name:: jenkins
 // File:: node_info
 //
 // Copyright 2010, VMware, Inc.
@@ -18,8 +18,8 @@
 // limitations under the License.
 //
 
-import hudson.slaves.*
-import hudson.model.*
+import jenkins.slaves.*
+import jenkins.model.*
 
 def toJSON(node) {
   if (node instanceof Map) {
@@ -33,7 +33,7 @@ def toJSON(node) {
   }
 }
 
-slave = Hudson.instance.getNode(this.args[0]) as Slave
+slave = Jenkins.instance.getNode(this.args[0]) as Slave
 
 if (slave == null) {
   println "{}"

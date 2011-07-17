@@ -1,6 +1,6 @@
 #
 # Author:: Doug MacEachern <dougm@vmware.com>
-# Cookbook Name:: hudson
+# Cookbook Name:: jenkins
 # Provider:: cli
 #
 # Copyright:: 2010, VMware, Inc.
@@ -19,17 +19,17 @@
 #
 
 def action_run
-  url = @new_resource.url || node[:hudson][:server][:url]
-  home = @new_resource.home || node[:hudson][:node][:home]
+  url = @new_resource.url || node[:jenkins][:server][:url]
+  home = @new_resource.home || node[:jenkins][:node][:home]
 
-  jnlp_jar = node[:hudson][:node][:cli_jar]
+  jnlp_jar = node[:jenkins][:node][:cli_jar]
   cli_jar = ::File.join(home, ::File.basename(jnlp_jar))
   remote_cli_jar = "#{url}/#{jnlp_jar}"
 
-  #recipes will chown to hudson later if this doesn't already exist
+  #recipes will chown to jenkins later if this doesn't already exist
   directory "home for #{::File.basename(jnlp_jar)}" do
     action :create
-    path node[:hudson][:node][:home]
+    path node[:jenkins][:node][:home]
   end
 
   remote_file cli_jar do
@@ -49,7 +49,7 @@ def action_run
     notifies :create, resources(:remote_file => cli_jar), :immediately
   end
 
-  java_home = node[:hudson][:java_home] || (node.has_key?(:java) ? node[:java][:jdk_dir] : nil)
+  java_home = node[:jenkins][:java_home] || (node.has_key?(:java) ? node[:java][:jdk_dir] : nil)
   if java_home == nil
     java = "java"
   else
@@ -58,7 +58,7 @@ def action_run
 
   command = "#{java} -jar #{cli_jar} -s #{url} #{@new_resource.command}"
 
-  hudson_execute command do
+  jenkins_execute command do
     cwd home
     block { |stdout| new_resource.block.call(stdout) } if new_resource.block
     only_if new_resource.only_if

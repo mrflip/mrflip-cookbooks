@@ -1,6 +1,6 @@
 #
 # Author:: Doug MacEachern <dougm@vmware.com>
-# Cookbook Name:: hudson
+# Cookbook Name:: jenkins
 # Recipe:: node_windows
 #
 # Copyright 2010, VMware, Inc.
@@ -8,9 +8,9 @@
 # Licensed under the Apache License, Version 2.0 (the "License");
 # you may not use this file except in compliance with the License.
 # You may obtain a copy of the License at
-# 
+#
 #     http://www.apache.org/licenses/LICENSE-2.0
-# 
+#
 # Unless required by applicable law or agreed to in writing, software
 # distributed under the License is distributed on an "AS IS" BASIS,
 # WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
@@ -18,39 +18,39 @@
 # limitations under the License.
 #
 
-home = node[:hudson][:node][:home]
-url  = node[:hudson][:server][:url]
+home = node[:jenkins][:node][:home]
+url  = node[:jenkins][:server][:url]
 
-hudson_exe = "#{home}\\hudson-slave.exe"
-service_name = "hudsonslave"
+jenkins_exe = "#{home}\\jenkins-slave.exe"
+service_name = "jenkinsslave"
 
 directory home do
   action :create
 end
 
-env "HUDSON_HOME" do
+env "JENKINS_HOME" do
   action :create
   value home
 end
 
-env "HUDSON_URL" do
+env "JENKINS_URL" do
   action :create
   value url
 end
 
-template "#{home}/hudson-slave.xml" do
-  source "hudson-slave.xml"
-  variables(:hudson_home => home,
-            :jnlp_url => "#{url}/computer/#{node[:hudson][:node][:name]}/slave-agent.jnlp")
+template "#{home}/jenkins-slave.xml" do
+  source "jenkins-slave.xml"
+  variables(:jenkins_home => home,
+            :jnlp_url => "#{url}/computer/#{node[:jenkins][:node][:name]}/slave-agent.jnlp")
 end
 
-#XXX how-to get this directly from the hudson server?
-remote_file hudson_exe do
+#XXX how-to get this directly from the jenkins server?
+remote_file jenkins_exe do
   source "http://maven.dyndns.org/2/com/sun/winsw/winsw/1.8/winsw-1.8-bin.exe"
-  not_if { File.exists?(hudson_exe) }
+  not_if { File.exists?(jenkins_exe) }
 end
 
-execute "#{hudson_exe} install" do
+execute "#{jenkins_exe} install" do
   cwd home
   only_if { WMI::Win32_Service.find(:first, :conditions => {:name => service_name}).nil? }
 end
@@ -59,15 +59,15 @@ service service_name do
   action :nothing
 end
 
-hudson_node node[:hudson][:node][:name] do
-  description  node[:hudson][:node][:description]
-  executors    node[:hudson][:node][:executors]
-  remote_fs    node[:hudson][:node][:home]
-  labels       node[:hudson][:node][:labels]
-  mode         node[:hudson][:node][:mode]
-  launcher     node[:hudson][:node][:launcher]
-  mode         node[:hudson][:node][:mode]
-  availability node[:hudson][:node][:availability]
+jenkins_node node[:jenkins][:node][:name] do
+  description  node[:jenkins][:node][:description]
+  executors    node[:jenkins][:node][:executors]
+  remote_fs    node[:jenkins][:node][:home]
+  labels       node[:jenkins][:node][:labels]
+  mode         node[:jenkins][:node][:mode]
+  launcher     node[:jenkins][:node][:launcher]
+  mode         node[:jenkins][:node][:mode]
+  availability node[:jenkins][:node][:availability]
 end
 
 remote_file "#{home}\\slave.jar" do

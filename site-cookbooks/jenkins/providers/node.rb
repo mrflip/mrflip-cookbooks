@@ -1,6 +1,6 @@
 #
 # Author:: Doug MacEachern <dougm@vmware.com>
-# Cookbook Name:: hudson
+# Cookbook Name:: jenkins
 # Provider:: node
 #
 # Copyright:: 2010, VMware, Inc.
@@ -30,11 +30,11 @@ def action_create
     backup false
   end
 
-  cookbook_file "#{node[:hudson][:node][:home]}/node_info.groovy" do
+  cookbook_file "#{node[:jenkins][:node][:home]}/node_info.groovy" do
     source "node_info.groovy"
   end
 
-  hudson_cli "groovy node_info.groovy #{new_resource.name}" do
+  jenkins_cli "groovy node_info.groovy #{new_resource.name}" do
     block do |stdout|
       current_node = JSON.parse(stdout)
       node_exists = current_node.keys.size > 0
@@ -42,13 +42,13 @@ def action_create
         Chef::Application.fatal! "Cannot update #{new_resource} - node does not exist!"
       end
       new_node = new_resource.to_hash
-      if !node_exists || hudson_node_compare(current_node, new_node)
-        ::File.open(gscript, "w") {|f| f.write hudson_node_manage(new_node) }
+      if !node_exists || jenkins_node_compare(current_node, new_node)
+        ::File.open(gscript, "w") {|f| f.write jenkins_node_manage(new_node) }
       end
     end
   end
 
-  hudson_cli "groovy #{gscript}" do
+  jenkins_cli "groovy #{gscript}" do
     only_if { ::File.exists?(gscript) }
   end
 
@@ -59,21 +59,21 @@ def action_create
 end
 
 def action_delete
-  hudson_cli "delete-node #{new_resource.name}"
+  jenkins_cli "delete-node #{new_resource.name}"
 end
 
 def action_connect
-  hudson_cli "connect-node #{new_resource.name}"
+  jenkins_cli "connect-node #{new_resource.name}"
 end
 
 def action_disconnect
-  hudson_cli "disconnect-node #{new_resource.name}"
+  jenkins_cli "disconnect-node #{new_resource.name}"
 end
 
 def action_online
-  hudson_cli "online-node #{new_resource.name}"
+  jenkins_cli "online-node #{new_resource.name}"
 end
 
 def action_offline
-  hudson_cli "offline-node #{new_resource.name}"
+  jenkins_cli "offline-node #{new_resource.name}"
 end

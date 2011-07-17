@@ -1,6 +1,6 @@
 #
 # Author:: Doug MacEachern <dougm@vmware.com>
-# Cookbook Name:: hudson
+# Cookbook Name:: jenkins
 # Library:: manage_node
 #
 # Copyright 2010, VMware, Inc.
@@ -8,9 +8,9 @@
 # Licensed under the Apache License, Version 2.0 (the "License");
 # you may not use this file except in compliance with the License.
 # You may obtain a copy of the License at
-# 
+#
 #     http://www.apache.org/licenses/LICENSE-2.0
-# 
+#
 # Unless required by applicable law or agreed to in writing, software
 # distributed under the License is distributed on an "AS IS" BASIS,
 # WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
@@ -18,7 +18,7 @@
 # limitations under the License.
 #
 
-def hudson_node_defaults(args)
+def jenkins_node_defaults(args)
   args[:name] ||= nil #required
   args[:description] ||= ""
   args[:remote_fs] ||= nil #required
@@ -58,9 +58,9 @@ end
 # === Returns
 # <true>:: If a change is required
 # <false>:: If the nodes are identical
-def hudson_node_compare(current_node, new_node)
-  new_node = hudson_node_defaults(new_node)
-  default = hudson_node_defaults({:launcher => new_node[:launcher],
+def jenkins_node_compare(current_node, new_node)
+  new_node = jenkins_node_defaults(new_node)
+  default = jenkins_node_defaults({:launcher => new_node[:launcher],
                                   :availability => new_node[:availability]})
   default.keys.each do |key|
     val = new_node[key] || default[key]
@@ -74,12 +74,12 @@ def hudson_node_compare(current_node, new_node)
 end
 
 #generate a groovy script to create/update nodes
-def hudson_node_manage(args)
-  args = hudson_node_defaults(args)
+def jenkins_node_manage(args)
+  args = jenkins_node_defaults(args)
 
   if args[:env]
     map = args[:env].collect { |k,v| %Q("#{k}":"#{v}") }.join(",")
-    env = "new hudson.EnvVars([#{map}])"
+    env = "new jenkins.EnvVars([#{map}])"
   else
     env = "null"
   end
@@ -100,7 +100,7 @@ def hudson_node_manage(args)
                                     "#{args[:private_key]}", "#{args[:jvm_options]}"] as Object[]))
   end
 
-  remote_fs = args[:remote_fs].gsub('\\', '\\\\\\') # C:\hudson -> C:\\hudson
+  remote_fs = args[:remote_fs].gsub('\\', '\\\\\\') # C:\jenkins -> C:\\jenkins
 
   if args[:availability] == "Demand"
     rs_args = "#{args[:in_demand_delay]}, #{args[:idle_delay]}"
@@ -109,16 +109,16 @@ def hudson_node_manage(args)
   end
 
   return <<EOF
-import hudson.model.*
-import hudson.slaves.*
+import jenkins.model.*
+import jenkins.slaves.*
 
-app = Hudson.instance
+app = Jenkins.instance
 env = #{env}
 props = []
 
 def new_ssh_launcher(args) {
-  Hudson.instance.pluginManager.getPlugin("ssh-slaves").classLoader.
-    loadClass("hudson.plugins.sshslaves.SSHLauncher").
+  Jenkins.instance.pluginManager.getPlugin("ssh-slaves").classLoader.
+    loadClass("jenkins.plugins.sshslaves.SSHLauncher").
       getConstructor([String, int, String, String, String, String] as Class[]).newInstance(args)
 }
 
@@ -146,11 +146,11 @@ app.setNodes(nodes)
 EOF
 end
 
-#ruby manage_node.rb name slave-hostname remote_fs /home/hudson ... | java -jar hudson-cli.jar -s http://hudson:8080/ groovy =
+#ruby manage_node.rb name slave-hostname remote_fs /home/jenkins ... | java -jar jenkins-cli.jar -s http://jenkins:8080/ groovy =
 if File.basename($0) == File.basename(__FILE__)
   args = Hash.new
   ARGV.each_slice(2) do |k,v|
     args[k.to_sym] = v
   end
-  puts hudson_node_manage(args)
+  puts jenkins_node_manage(args)
 end

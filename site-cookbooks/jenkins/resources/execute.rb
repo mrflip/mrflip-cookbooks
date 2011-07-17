@@ -1,7 +1,7 @@
 #
 # Author:: Doug MacEachern <dougm@vmware.com>
-# Cookbook Name:: hudson
-# Resource:: cli
+# Cookbook Name:: jenkins
+# Resource:: execute
 #
 # Copyright:: 2010, VMware, Inc.
 #
@@ -20,9 +20,8 @@
 
 actions :run
 
-attribute :url, :kind_of => String
-attribute :home, :kind_of => String
 attribute :command, :kind_of => String
+attribute :cwd, :kind_of => String
 attribute :timeout, :kind_of => Integer
 attribute :block, :kind_of => Proc
 

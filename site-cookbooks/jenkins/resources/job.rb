@@ -1,7 +1,7 @@
 #
 # Author:: Doug MacEachern <dougm@vmware.com>
-# Cookbook Name:: hudson
-# Resource:: execute
+# Cookbook Name:: jenkins
+# Resource:: job
 #
 # Copyright:: 2010, VMware, Inc.
 #
@@ -18,23 +18,15 @@
 # limitations under the License.
 #
 
-actions :run
+actions :create, :update, :delete, :build, :disable, :enable
 
-attribute :command, :kind_of => String
-attribute :cwd, :kind_of => String
-attribute :timeout, :kind_of => Integer
-attribute :block, :kind_of => Proc
+attribute :url, :kind_of => String
+attribute :job_name, :kind_of => String
+attribute :config, :kind_of => String
 
 def initialize(name, run_context=nil)
   super
-  @action = :run
-  @command = name
-end
-
-def block(&block)
-  if block_given? and block
-    @block = block
-  else
-    @block
-  end
+  @action = :update
+  @job_name = name
+  @url = node[:jenkins][:server][:url]
 end

@@ -1,6 +1,6 @@
 #
 # Author:: Doug MacEachern <dougm@vmware.com>
-# Cookbook Name:: hudson
+# Cookbook Name:: jenkins
 # Provider:: execute
 #
 # Copyright:: 2010, VMware, Inc.
@@ -31,15 +31,15 @@ def action_run
   args[:not_if] = @new_resource.not_if if @new_resource.not_if
   args[:timeout] = @new_resource.timeout if @new_resource.timeout
   args[:cwd] = @new_resource.cwd if @new_resource.cwd
-        
+
   status, stdout, stderr = output_of_command(args[:command], args)
   if status.exitstatus == 0
     @new_resource.block.call(stdout) if @new_resource.block
     @new_resource.updated_by_last_action(true)
     Chef::Log.info("Ran #{@new_resource} successfully")
   else
-    command_output =  "HUDSON STDOUT: #{stdout}"
-    command_output << "HUDSON STDERR: #{stderr}"
+    command_output =  "JENKINS STDOUT: #{stdout}"
+    command_output << "JENKINS STDERR: #{stderr}"
     handle_command_failures(status, command_output, args)
   end
 end
