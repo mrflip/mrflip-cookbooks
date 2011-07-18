@@ -50,7 +50,7 @@ install_starts_service = true
 apt_key                = "/tmp/jenkins-ci.org.key"
 
 remote_file apt_key do
-  source "#{node[:jenkins][:debian_mirror]}/jenkins-ci.org.key"
+  source "#{node[:jenkins][:apt_mirror]}/jenkins-ci.org.key"
   action :create
 end
 
@@ -63,7 +63,7 @@ file "/etc/apt/sources.list.d/jenkins.list" do
   owner   "root"
   group   "root"
   mode    0644
-  content "deb #{node[:jenkins][:debian_mirror]} binary/\n"
+  content "deb #{node[:jenkins][:apt_mirror]} binary/\n"
   action  :create
   notifies :run, "execute[add-jenkins_repo-key]",        :immediately
   notifies :run, resources(:execute => "apt-get update"), :immediately

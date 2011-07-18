@@ -23,6 +23,7 @@ ClusterChef.cluster 'demojenkins' do
     override_attributes({
         :jenkins => {
           :server => {
+            :host => '0.0.0.0',
             :port => jenkins_server_port,
           }
         },

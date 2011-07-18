@@ -33,23 +33,25 @@ else
   default[:jenkins][:server][:group] = node[:jenkins][:server][:user]
 end
 
-default[:jenkins][:server][:port] = 8080
-default[:jenkins][:server][:host] = node[:fqdn]
-default[:jenkins][:server][:url]  = "http://#{node[:jenkins][:server][:host]}:#{node[:jenkins][:server][:port]}"
+# We'd rather do something like this
+# case node[:jenkins][:server][:host_from].to_s
+# when 'public_ip'  then node[:cloud][:public_ips].first
+# when 'private_ip' then node[:cloud][:private_ips].first
+# else node[:jenkins][:server][:address]
+# end
+
+default[:jenkins][:server][:port]    = 8080
+default[:jenkins][:server][:host]    = node[:fqdn]
+default[:jenkins][:server][:url]     = "http://#{node[:fqdn]}:#{node[:jenkins][:server][:port]}"
 
 #download the latest version of plugins, bypassing update center
 #example: ["git", "URLSCM", ...]
 default[:jenkins][:server][:plugins] = []
 
-#working around: http://tickets.opscode.com/browse/CHEF-1848
-#set to true if you have the CHEF-1848 patch applied
-default[:jenkins][:server][:use_head] = false
-
 #See Jenkins >> Nodes >> $name >> Configure
 
 #"Name"
-default[:jenkins][:node][:name] = node[:fqdn]
-
+default[:jenkins][:node][:name]    = node.name
 default[:jenkins][:node][:cli_jar] = "jnlpJars/jenkins-cli.jar"
 
 #"Description"

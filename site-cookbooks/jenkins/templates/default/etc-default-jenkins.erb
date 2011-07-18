@@ -37,6 +37,8 @@ JENKINS_LOG=/var/log/jenkins/$NAME.log
 #   descriptors are forced to 1024 regardless of /etc/security/limits.conf
 MAXOPENFILES=8192
 
+# interface for HTTP connector to bind to
+HTTP_HOST=<%= node[:jenkins][:server][:host] %>
 # port for HTTP connector (default 8080; disable with -1)
 HTTP_PORT=<%= node[:jenkins][:server][:port] %>
 
@@ -51,4 +53,4 @@ AJP_PORT=-1
 # --argumentsRealm.passwd.$ADMIN_USER=[password]
 # --argumentsRealm.$ADMIN_USER=admin
 # --webroot=~/.jenkins/war
-JENKINS_ARGS="--webroot=/var/run/jenkins/war --httpPort=$HTTP_PORT --ajp13Port=$AJP_PORT"
+JENKINS_ARGS="--webroot=/var/run/jenkins/war --httpListenAddress=$HTTP_HOST --httpPort=$HTTP_PORT --ajp13Port=$AJP_PORT"
