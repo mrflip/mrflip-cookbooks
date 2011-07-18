@@ -1,10 +1,1 @@
-name        'base_role'
-description 'top level attributes, applies to all nodes'
-
-run_list *%w[
-  cluster_chef::node_name
-
-  build-essential
-  motd
-
-  ]
+../cluster_chef/roles/base_role.rb
