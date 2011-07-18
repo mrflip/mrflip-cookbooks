@@ -1,0 +1,1 @@
+../cluster_chef/roles/resque_server.rb
