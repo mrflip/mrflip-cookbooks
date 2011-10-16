@@ -1,0 +1,1 @@
+../cluster_chef/roles/demohbase_master.rb

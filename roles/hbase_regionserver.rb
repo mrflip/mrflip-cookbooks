@@ -1,0 +1,1 @@
+../cluster_chef/roles/hbase_regionserver.rb

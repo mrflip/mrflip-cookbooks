@@ -1,0 +1,1 @@
+../cluster_chef/roles/hadoop_namenode.rb

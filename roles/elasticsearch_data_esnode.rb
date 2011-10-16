@@ -1,0 +1,1 @@
+../cluster_chef/roles/elasticsearch_data_esnode.rb
