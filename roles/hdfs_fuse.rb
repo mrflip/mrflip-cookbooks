@@ -1,1 +1,0 @@
-../cluster_chef/roles/hdfs_fuse.rb

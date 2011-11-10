@@ -1,1 +1,0 @@
-../cluster_chef/roles/demohadoop_worker.rb

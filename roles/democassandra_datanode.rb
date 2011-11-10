@@ -1,1 +1,0 @@
-../cluster_chef/roles/democassandra_datanode.rb

@@ -1,12 +1,5 @@
-name        'base_role'
+name        'mrflip_base'
 description 'top level attributes, applies to all nodes'
-
-run_list(*%w[
-  motd
-
-  build-essential
-  ubuntu
-])
 
 
 #
@@ -16,12 +9,12 @@ run_list(*%w[
 #
 default_attributes({
     :active_users => [
-    #  'flip'
+      "flip"
     ],
     :authorization => { :sudo => { :groups => ['admin'], :users => ['ubuntu'] } },
     :groups => {
-      # 'flip'          => { :gid => 1001, },
-
+     'flip'          => { :gid => 1001, },
+      #
       'deploy'        => { :gid => 2000, },
       #
       'admin'         => { :gid =>  200, },
@@ -51,8 +44,8 @@ default_attributes({
     # Want your password auto-set? Run `mkpasswd -m sha-512`, type in your password when prompted (it will not echo to the screen). Paste the magic gobbledygook into the :password => '' part, below:
     #
     :users => {
-      # 'flip'          => { :uid => 1001, :groups => %w[ flip      admin sudo supergroup ], :comment => "Philip (flip) Kromer", :password => '$6$vS/sJmmI$aorlnWkRJgeh02lvCpZLnDDBEUWUSalHJUL520nl/u2yo1F.DhtXcFKpOgwm1n58cS9yr3Xj.mzeZipubyJ4F/', :shell => '/bin/bash' }, #
-
+      'flip'          => { :uid => 1001, :groups => %w[ flip      admin sudo supergroup ], :comment => "Philip (flip) Kromer", :password => '$6$vS/sJmmI$aorlnWkRJgeh02lvCpZLnDDBEUWUSalHJUL520nl/u2yo1F.DhtXcFKpOgwm1n58cS9yr3Xj.mzeZipubyJ4F/', :shell => '/bin/bash' }, #
+      #
       'deploy'        => { :uid => 2000, :groups => %w[ deploy    admin sudo www-data   ], :comment => "For Capistrano"      ,       :shell => '/bin/false', },
       #
       'hdfs'          => { :uid =>  302, :groups => %w[ hdfs      hadoop                ], :comment => "Hadoop HDFS User",           :shell => '/bin/false', },

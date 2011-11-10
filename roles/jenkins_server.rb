@@ -1,1 +1,0 @@
-../cluster_chef/roles/jenkins_server.rb

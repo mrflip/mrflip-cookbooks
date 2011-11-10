@@ -1,1 +1,0 @@
-../cluster_chef/roles/demohbase_regionserver.rb

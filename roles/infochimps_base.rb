@@ -1,0 +1,1 @@
+../../infochimps_chef/roles/infochimps_base.rb

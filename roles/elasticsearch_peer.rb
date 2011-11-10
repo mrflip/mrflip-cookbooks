@@ -1,1 +1,0 @@
-../cluster_chef/roles/elasticsearch_peer.rb

@@ -1,1 +1,0 @@
-../cluster_chef/roles/cassandra_client.rb
