@@ -1,1 +1,0 @@
-../cluster_chef/roles/ebs_volumes_mount.rb

@@ -1,0 +1,1 @@
+../cluster_chef/clusters/burninator.rb

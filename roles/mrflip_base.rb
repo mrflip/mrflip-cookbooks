@@ -1,6 +1,7 @@
 name        'mrflip_base'
 description 'top level attributes, applies to all nodes'
 
+run_list 'users'
 
 #
 # Attributes applied if the node doesn't have it set already.
@@ -8,8 +9,8 @@ description 'top level attributes, applies to all nodes'
 # necessary
 #
 default_attributes({
-    :active_users => [
-      "flip"
+    :active_users => %w[
+      flip
     ],
     :authorization => { :sudo => { :groups => ['admin'], :users => ['ubuntu'] } },
     :groups => {
@@ -26,6 +27,7 @@ default_attributes({
       'mapred'        => { :gid =>  303, },
       'hbase'         => { :gid =>  304, },
       'zookeeper'     => { :gid =>  305, },
+      'ganglia'       => { :gid =>  320, },
       #
       'cassandra'     => { :gid =>  330, },
       'databases'     => { :gid =>  331, },
@@ -52,6 +54,7 @@ default_attributes({
       'mapred'        => { :uid =>  303, :groups => %w[ mapred    hadoop                ], :comment => "Hadoop Mapred Runner",       :shell => '/bin/false', },
       'hbase'         => { :uid =>  304, :groups => %w[ hbase                           ], :comment => "Hadoop HBase Daemon",        :shell => '/bin/false', },
       'zookeeper'     => { :uid =>  305, :groups => %w[ zookeeper                       ], :comment => "Hadoop Zookeeper Daemon",    :shell => '/bin/false', },
+      'ganglia'       => { :uid =>  320, :groups => %w[ ganglia                         ], :comment => "Ganglia Daemon",             :shell => '/bin/false', },
       #
       'cassandra'     => { :uid =>  330, :groups => %w[           databases             ], :comment => "Cassandra db",               :shell => '/bin/false', },
       'azkaban'       => { :uid =>  332, :groups => %w[                                 ], :comment => "Azkaban runner",             :shell => '/bin/false', },
